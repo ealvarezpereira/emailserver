@@ -1,0 +1,24 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: email-sender
+
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:rabbitmq}
+    password: ${SPRING_RABBITMQ_PASSWORD:rabbitmq}
+
+app:
+  rabbitmq:
+    exchange: email.exchange
+    queue: email.queue
+    routing-key: email.routing.key
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
