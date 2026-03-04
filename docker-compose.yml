@@ -98,9 +98,14 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER:-rabbitmq}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-rabbitmq}
+      SPRING_DATASOURCE_URL=jdbc: postgresql://postgres:5432/emaildb
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     networks:
       - emailserver-network
     depends_on:
+      postgres:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     restart: unless-stopped
