@@ -1,9 +1,0 @@
-[build]
-builder = "dockerfile"
-dockerfilePath = "email-manager/Dockerfile"
-buildContext = "."
-
-[deploy]
-healthcheckPath = "/actuator/health"
-healthcheckTimeout = 120
-restartPolicyType = "on_failure"
