@@ -205,3 +205,4 @@ buildNumber.properties
 #HSQLDB
 templateDB.lck
 templateDB.properties
+.env

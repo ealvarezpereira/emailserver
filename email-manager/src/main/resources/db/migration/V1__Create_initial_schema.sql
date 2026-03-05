@@ -1,7 +1,7 @@
 -- 1. Users
 CREATE TABLE tusers (
     user_id      SERIAL PRIMARY KEY,
-    user_email   VARCHAR(255),
+    user_email   VARCHAR(255) UNIQUE,
     user_name    VARCHAR(255),
     user_surname VARCHAR(255)
 );

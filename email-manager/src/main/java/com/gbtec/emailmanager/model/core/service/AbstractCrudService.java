@@ -6,34 +6,33 @@ import java.util.Map;
 import com.gbtec.emailmanager.api.core.service.ICrudService;
 import com.gbtec.emailmanager.model.core.dao.AbstractCrudDao;
 
-
-
 /**
- * Servicio base genérico.
- * <br>
- * La subclase inyecta su DAO concreto con @Autowired estándar de Spring.
+ * Generic base service that delegates to the specific DAO.
+ * <p>
+ * The subclass implements {@link #getDao()} returning its specific DAO. Any
+ * method can be overridden to add business logic.
  */
-public abstract class AbstractCrudService implements ICrudService<Integer> {
+public abstract class AbstractCrudService implements ICrudService {
 
-    protected abstract AbstractCrudDao getDao();
+   protected abstract AbstractCrudDao getDao();
 
-    @Override
-    public List<Map<String, Object>> query(Map<String, Object> filter, List<String> columns) {
-        return getDao().query(filter, columns);
-    }
+   @Override
+   public List<Map<String, Object>> query(Map<String, Object> filter, List<String> columns, String sort) {
+      return this.getDao().query(filter, columns, sort);
+   }
 
-    @Override
-    public Map<String, Object> insert(Map<String, Object> attributes) {
-        return getDao().insert(attributes);
-    }
+   @Override
+   public Map<String, Object> insert(Map<String, Object> attributes) {
+      return this.getDao().insert(attributes);
+   }
 
-    @Override
-    public Map<String, Object> update(Integer id, Map<String, Object> attributes) {
-        return getDao().update(id, attributes);
-    }
+   @Override
+   public Map<String, Object> update(Integer id, Map<String, Object> attributes) {
+      return this.getDao().update(id, attributes);
+   }
 
-    @Override
-    public void delete(Integer id) {
-        getDao().delete(id);
-    }
+   @Override
+   public void delete(Integer id) {
+      this.getDao().delete(id);
+   }
 }
