@@ -11,14 +11,32 @@ spring:
     username: ${SPRING_RABBITMQ_USERNAME:rabbitmq}
     password: ${SPRING_RABBITMQ_PASSWORD:rabbitmq}
 
+  # Mock SMTP configuration (no real emails are sent)
+  # To switch to real sending, replace host/port/username/password with valid SMTP credentials
+  mail:
+    host: ${SPRING_MAIL_HOST:mock-smtp-host}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:mock@example.com}
+    password: ${SPRING_MAIL_PASSWORD:mock-password}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
 app:
   rabbitmq:
     exchange: email.exchange
     queue: email.queue
     routing-key: email.routing.key
 
+logging:
+  file:
+    name: /tmp/email-sender.log
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,logfile
