@@ -1,0 +1,38 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-manager:
+    name: Deploy email-manager
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy email-manager
+        run: railway up --service email-manager --detach
+        working-directory: .
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  deploy-sender:
+    name: Deploy email-sender
+    runs-on: ubuntu-latest
+    needs: deploy-manager
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy email-sender
+        run: railway up --service email-sender --detach
+        working-directory: .
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
