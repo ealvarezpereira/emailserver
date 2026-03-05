@@ -10,14 +10,15 @@ jobs:
     name: Deploy email-manager
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
       - name: Deploy email-manager
         run: railway up --service email-manager --detach
-        working-directory: .
+        working-directory: ./email-manager
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
@@ -26,13 +27,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-manager
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
       - name: Deploy email-sender
         run: railway up --service email-sender --detach
-        working-directory: .
+        working-directory: ./email-sender
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
