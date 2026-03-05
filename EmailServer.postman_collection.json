@@ -1,0 +1,442 @@
+{
+  "info": {
+    "name": "EmailServer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Listar todos los usuarios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/users",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener usuario por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/users/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener emails de un usuario",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/users/4/emails",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "4",
+                "emails"
+              ]
+            },
+            "description": "Devuelve todos los emails enviados por el usuario con ID 4 (carl@gbtec.es). Cada email incluye emailFromUser con nombre y apellido del emisor."
+          }
+        },
+        {
+          "name": "Crear usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/users",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userEmail\": \"marcus@gbtec.es\",\n  \"userName\": \"Marcus\",\n  \"userSurname\": \"Smith\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/users/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userEmail\": \"javier.garcia.updated@example.com\",\n  \"userName\": \"Javier\",\n  \"userSurname\": \"Garcia Actualizado\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar usuario",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8080/users/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Emails",
+      "item": [
+        {
+          "name": "Insertar emails (masivo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/emails",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\n    {\n      \"emailFrom\": \"javier.garcia@example.com\",\n      \"emailTo\": [{\"email\": \"maria.lopez@example.com\"}, {\"email\": \"admin@proyect.es\"}],\n      \"emailCC\": [{\"email\": \"carl@gbtec.es\"}],\n      \"emailSubject\": \"Reunion de equipo\",\n      \"emailBody\": \"Recordad la reunion del lunes.\",\n      \"state\": 2\n    },\n    {\n      \"emailFrom\": \"carl@gbtec.es\",\n      \"emailTo\": [{\"email\": \"soporte@tecnico.com\"}],\n      \"emailCC\": [{\"email\": \"admin@proyect.es\"}],\n      \"emailSubject\": \"Incidencia produccion\",\n      \"emailBody\": \"Hay un problema en el entorno de produccion.\",\n      \"state\": 1\n    }\n  ]\n}",
+              "_postman_previewlanguage": "json"
+            },
+            "description": "Todos los emailFrom y emailTo deben existir en tusers (400 si no). Si state=1 el email se despacha via Feign y RabbitMQ."
+          }
+        },
+        {
+          "name": "Insertar email - Error 400 (emisor no registrado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/emails",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\n    {\n      \"emailFrom\": \"desconocido@noexiste.com\",\n      \"emailTo\": [{\"email\": \"maria.lopez@example.com\"}],\n      \"emailSubject\": \"Test error\",\n      \"emailBody\": \"Este email debe devolver 400.\",\n      \"state\": 2\n    }\n  ]\n}",
+              "_postman_previewlanguage": "json"
+            },
+            "description": "El emisor desconocido@noexiste.com no esta registrado en tusers -> 400."
+          }
+        },
+        {
+          "name": "Listar todos los emails",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ]
+            },
+            "description": "Incluye emailFromUser con nombre y apellido del emisor si esta registrado en tusers."
+          }
+        },
+        {
+          "name": "Listar emails por estado - Enviado (1)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails?state=1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar emails por estado - Borrador (2)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails?state=2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar emails por estado - Eliminado (3)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails?state=3",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar emails por estado - Spam (4)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails?state=4",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "4"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener email por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/emails/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Enviar email (borrador → enviado)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8080/emails/1/send",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails",
+                "1",
+                "send"
+              ]
+            },
+            "description": "Cambia el estado del email de Borrador (2) a Enviado (1) y lo despacha vía Feign + RabbitMQ. Devuelve 422 si el email no está en estado Borrador."
+          }
+        },
+        {
+          "name": "Enviar email - Error 422 (no es Borrador)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8080/emails/3/send",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails",
+                "3",
+                "send"
+              ]
+            },
+            "description": "El email con ID 3 ya está en estado Enviado (1) -> 422."
+          }
+        },
+        {
+          "name": "Actualizar email (solo Borrador)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/emails/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailTo\": [{\"email\": \"soporte@tecnico.com\"}],\n  \"emailCC\": [],\n  \"emailSubject\": \"Asunto actualizado\",\n  \"emailBody\": \"Cuerpo actualizado.\"\n}",
+              "_postman_previewlanguage": "json"
+            },
+            "description": "Solo emails en estado Borrador (state=2). Devuelve 422 si el email tiene otro estado."
+          }
+        },
+        {
+          "name": "Actualizar email - Error 422 (no es Borrador)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/emails/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails",
+                "2"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailTo\": [{\"email\": \"soporte@tecnico.com\"}],\n  \"emailSubject\": \"Intento de actualizacion\",\n  \"emailBody\": \"Este email debe devolver 422.\"\n}",
+              "_postman_previewlanguage": "json"
+            },
+            "description": "El email con ID 2 fue insertado con state=1 (Enviado) y no puede ser modificado -> 422."
+          }
+        },
+        {
+          "name": "Eliminar emails (masivo)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/emails",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "emails"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[1, 2]",
+              "_postman_previewlanguage": "json"
+            },
+            "description": "Marca los emails como Eliminado (state=3). Devuelve 404 si algun ID no existe."
+          }
+        }
+      ]
+    }
+  ]
+}
