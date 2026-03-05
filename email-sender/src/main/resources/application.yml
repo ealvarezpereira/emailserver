@@ -17,8 +17,12 @@ app:
     queue: email.queue
     routing-key: email.routing.key
 
+logging:
+  file:
+    name: /tmp/email-manager.log
+    
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,logfile

@@ -29,9 +29,13 @@ spring:
 app:
   feign:
     sender-url: ${APP_FEIGN_SENDER_URL:http://localhost:8081}
-
+    
+logging:
+  file:
+    name: /tmp/email-manager.log
+    
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,logfile

@@ -113,7 +113,17 @@ services:
       rabbitmq:
         condition: service_healthy
     restart: unless-stopped
-          
+
+  logs-viewer:
+    image: amir20/dozzle:latest
+    container_name: emailserver-dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "2002:8080"
+    networks:
+      - emailserver-network
+
 networks:
   emailserver-network:
     driver: bridge
